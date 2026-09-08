@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../config/api";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -9,9 +10,10 @@ function Register() {
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const response = await fetch("https://taskflow-rijw.onrender.com/api/auth/register", {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,8 +33,11 @@ function Register() {
     } else {
       alert(data.message);
     }
-  };
-
+  } catch (err) {
+    console.error("Register request failed:", err);
+    alert("Could not reach the server. Please try again in a moment.");
+  }
+};
   return (
     <div className="auth-container">
       <div className="auth-card">

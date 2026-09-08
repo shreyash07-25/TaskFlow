@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { API_BASE_URL } from "../config/api";
 function TaskForm({ onTaskCreated }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -10,7 +10,7 @@ function TaskForm({ onTaskCreated }) {
 
     const token = localStorage.getItem("token");
 
-    const response = await fetch("https://taskflow-rijw.onrender.com/api/tasks/", {
+    const response = await fetch(`${API_BASE_URL}/api/tasks/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
