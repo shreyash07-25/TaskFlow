@@ -8,7 +8,7 @@ function Dashboard() {
   const fetchTasks = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch("http://localhost:5000/api/tasks/", {
+   const response = await fetch("https://taskflow-rijw.onrender.com/api/tasks/", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,9 +28,9 @@ function Dashboard() {
   const deleteTask = async (taskId) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(
-      `http://localhost:5000/api/tasks/${taskId}`,
-      {
+   const response = await fetch(
+  "https://taskflow-rijw.onrender.com/api/tasks/${taskId}",
+  {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -53,7 +53,7 @@ function Dashboard() {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-      `http://localhost:5000/api/tasks/${task._id}`,
+      "http://taskflow-rijw.onrender.com/api/tasks/${task._id}",
       {
         method: "PUT",
         headers: {
@@ -78,7 +78,7 @@ function Dashboard() {
       task.status === "pending" ? "completed" : "pending";
 
     const response = await fetch(
-      `http://localhost:5000/api/tasks/${task._id}`,
+      `http://taskflow-rijw.onrender.com/api/tasks/${task._id}`,
       {
         method: "PUT",
         headers: {
