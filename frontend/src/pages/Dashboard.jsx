@@ -29,14 +29,14 @@ function Dashboard() {
     const token = localStorage.getItem("token");
 
    const response = await fetch(
-  "https://taskflow-rijw.onrender.com/api/tasks/${taskId}",
+  `https://taskflow-rijw.onrender.com/api/tasks/${taskId}`,
   {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
 
     if (response.ok) {
       fetchTasks();
@@ -53,18 +53,18 @@ function Dashboard() {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-      "http://taskflow-rijw.onrender.com/api/tasks/${task._id}",
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          title: newTitle,
-        }),
-      }
-    );
+  `https://taskflow-rijw.onrender.com/api/tasks/${task._id}`,
+  {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      title: newTitle,
+    }),
+  }
+);
 
     if (response.ok) {
       fetchTasks();
@@ -78,7 +78,7 @@ function Dashboard() {
       task.status === "pending" ? "completed" : "pending";
 
     const response = await fetch(
-      `http://taskflow-rijw.onrender.com/api/tasks/${task._id}`,
+      `https://taskflow-rijw.onrender.com/api/tasks/${task._id}`,
       {
         method: "PUT",
         headers: {

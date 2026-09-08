@@ -10,7 +10,7 @@ function TaskForm({ onTaskCreated }) {
 
     const token = localStorage.getItem("token");
 
-    const response = await fetch("http://taskflow-rijw.onrender.com/api/tasks/", {
+    const response = await fetch("https://taskflow-rijw.onrender.com/api/tasks/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
