@@ -9,7 +9,7 @@ function Dashboard() {
   const fetchTasks = async () => {
     const token = localStorage.getItem("token");
 
-   const response = await fetch("https://taskflow-rijw.onrender.com/api/tasks/", {
+    const response = await fetch(`${API_BASE_URL}/api/tasks/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -29,15 +29,15 @@ function Dashboard() {
   const deleteTask = async (taskId) => {
     const token = localStorage.getItem("token");
 
-   const response = await fetch(
-  `https://taskflow-rijw.onrender.com/api/tasks/${taskId}`,
-  {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-);
+    const response = await fetch(
+      `${API_BASE_URL}/api/tasks/${taskId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (response.ok) {
       fetchTasks();
@@ -54,18 +54,18 @@ function Dashboard() {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-  `https://taskflow-rijw.onrender.com/api/tasks/${task._id}`,
-  {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      title: newTitle,
-    }),
-  }
-);
+      `${API_BASE_URL}/api/tasks/${task._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title: newTitle,
+        }),
+      }
+    );
 
     if (response.ok) {
       fetchTasks();
@@ -79,7 +79,7 @@ function Dashboard() {
       task.status === "pending" ? "completed" : "pending";
 
     const response = await fetch(
-      `https://taskflow-rijw.onrender.com/api/tasks/${task._id}`,
+      `${API_BASE_URL}/api/tasks/${task._id}`,
       {
         method: "PUT",
         headers: {
@@ -115,19 +115,18 @@ function Dashboard() {
             <p>{task.description}</p>
 
             <p>
-  Priority:{" "}
-  <span className={`priority ${task.priority}`}>
-    {task.priority}
-  </span>
-</p>
-
+              Priority:{" "}
+              <span className={`priority ${task.priority}`}>
+                {task.priority}
+              </span>
+            </p>
 
             <p>
-  Status:{" "}
-  <span className={`status ${task.status}`}>
-    {task.status}
-  </span>
-</p>
+              Status:{" "}
+              <span className={`status ${task.status}`}>
+                {task.status}
+              </span>
+            </p>
             <button onClick={() => toggleStatus(task)}>
               {task.status === "pending"
                 ? "Mark Completed"
