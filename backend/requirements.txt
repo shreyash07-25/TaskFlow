@@ -4,3 +4,4 @@ pymongo
 PyJWT
 Werkzeug
 python-dotenv
+gunicorn
