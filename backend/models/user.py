@@ -2,7 +2,7 @@ from config import users_collection
 
 
 def find_user_by_email(email):
-    return users_collection.find_one({"email": email})
+    return users_collection.find_one({"email": email.strip().lower()})
 
 
 def create_user(user_data):
