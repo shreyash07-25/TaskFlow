@@ -1,62 +1,85 @@
-* {
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+@import "./styles/tokens.css";
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  color: #222;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  background: var(--bg);
+  color: var(--ink-900);
+  transition: background var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
+  -webkit-font-smoothing: antialiased;
 }
 
-button {
-  cursor: pointer;
+#root {
+  min-height: 100vh;
 }
 
-input,
-select {
-  padding: 10px;
-  margin: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-button {
-  padding: 10px 16px;
-  margin: 5px;
-  border: none;
-  border-radius: 5px;
-  background: #2563eb;
-  color: white;
-}
-
-button:hover {
-  background: #1d4ed8;
-}
-
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 30px;
-  background: #1e293b;
-  color: white;
-}
-
-nav h2 {
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--ink-900);
   margin: 0;
 }
 
-nav a {
-  color: white;
-  text-decoration: none;
-  margin-right: 15px;
+p {
+  margin: 0;
 }
 
-nav button {
-  background: #dc2626;
+a {
+  color: var(--flow-teal-600);
 }
 
-nav button:hover {
-  background: #b91c1c;
+[data-theme="dark"] a {
+  color: var(--flow-teal);
+}
+
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--flow-teal);
+  color: var(--ink-on-accent);
+}
+
+/* Focus visibility, kept even where components already style :focus */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

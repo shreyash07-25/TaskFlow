@@ -2,23 +2,42 @@ import { API_BASE_URL } from "../config/api";
 import { useEffect, useState } from "react";
 import TaskForm from "../components/TaskForm";
 import Navbar from "../components/Navbar";
+import TaskCard from "../components/TaskCard";
+import StatsCards from "../components/StatsCards";
+import EditTaskModal from "../components/EditTaskModal";
+import EmptyState from "../components/ui/EmptyState";
+import Spinner from "../components/ui/Spinner";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [editingTask, setEditingTask] = useState(null);
+  const [busyTaskId, setBusyTaskId] = useState(null);
 
   const fetchTasks = async () => {
+    setLoadError("");
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_BASE_URL}/api/tasks/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/tasks/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      setTasks(data);
+      if (response.ok) {
+        setTasks(data);
+      } else {
+        setLoadError(data.message || "Could not load tasks.");
+      }
+    } catch (err) {
+      console.error("Fetch tasks failed:", err);
+      setLoadError("Could not reach the server. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -27,127 +46,114 @@ function Dashboard() {
   }, []);
 
   const deleteTask = async (taskId) => {
+    setBusyTaskId(taskId);
     const token = localStorage.getItem("token");
 
-    const response = await fetch(
-      `${API_BASE_URL}/api/tasks/${taskId}`,
-      {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/tasks/${taskId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
-    );
+      });
 
-    if (response.ok) {
-      fetchTasks();
+      if (response.ok) {
+        fetchTasks();
+      }
+    } catch (err) {
+      console.error("Delete task failed:", err);
+    } finally {
+      setBusyTaskId(null);
     }
   };
 
-  const editTask = async (task) => {
-    const newTitle = prompt("Enter new title:", task.title);
-
-    if (!newTitle) {
-      return;
-    }
-
+  const updateTask = async (taskId, updates) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(
-      `${API_BASE_URL}/api/tasks/${task._id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          title: newTitle,
-        }),
-      }
-    );
+    const response = await fetch(`${API_BASE_URL}/api/tasks/${taskId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updates),
+    });
 
     if (response.ok) {
-      fetchTasks();
+      await fetchTasks();
+    } else {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.message || "Update failed");
     }
   };
 
   const toggleStatus = async (task) => {
-    const token = localStorage.getItem("token");
+    setBusyTaskId(task._id);
+    const newStatus = task.status === "pending" ? "completed" : "pending";
 
-    const newStatus =
-      task.status === "pending" ? "completed" : "pending";
-
-    const response = await fetch(
-      `${API_BASE_URL}/api/tasks/${task._id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          status: newStatus,
-        }),
-      }
-    );
-
-    if (response.ok) {
-      fetchTasks();
+    try {
+      await updateTask(task._id, { status: newStatus });
+    } catch (err) {
+      console.error("Toggle status failed:", err);
+    } finally {
+      setBusyTaskId(null);
     }
   };
 
   return (
-    <div className="container">
+    <div>
       <Navbar />
 
-      <h2>Task Dashboard</h2>
+      <main className="container">
+        <div className="page-header">
+          <h2>Task dashboard</h2>
+          <p className="page-header__subtitle">
+            Track what's next, what's in progress, and what's done.
+          </p>
+        </div>
 
-      <TaskForm onTaskCreated={fetchTasks} />
+        <StatsCards tasks={tasks} />
 
-      {tasks.length === 0 ? (
-        <p>No tasks found.</p>
-      ) : (
-        tasks.map((task) => (
-          <div className="task-card" key={task._id}>
-            <h3>{task.title}</h3>
+        <TaskForm onTaskCreated={fetchTasks} />
 
-            <p>{task.description}</p>
+        <section>
+          <h2 className="section-title">Your tasks</h2>
 
-            <p>
-              Priority:{" "}
-              <span className={`priority ${task.priority}`}>
-                {task.priority}
-              </span>
-            </p>
-
-            <p>
-              Status:{" "}
-              <span className={`status ${task.status}`}>
-                {task.status}
-              </span>
-            </p>
-            <button onClick={() => toggleStatus(task)}>
-              {task.status === "pending"
-                ? "Mark Completed"
-                : "Mark Pending"}
-            </button>
-
-            <div className="task-actions">
-              <button onClick={() => editTask(task)}>
-                Edit
-              </button>
-
-              <button
-                className="delete-button"
-                onClick={() => deleteTask(task._id)}
-              >
-                Delete
-              </button>
+          {isLoading ? (
+            <div className="loading-state">
+              <Spinner size={22} />
+              <span>Loading tasks…</span>
             </div>
-          </div>
-        ))
-      )}
+          ) : loadError ? (
+            <p className="field__message field__message--error">{loadError}</p>
+          ) : tasks.length === 0 ? (
+            <EmptyState
+              title="No tasks yet"
+              description="Add your first task above to start tracking your work."
+            />
+          ) : (
+            <div className="task-grid">
+              {tasks.map((task) => (
+                <TaskCard
+                  key={task._id}
+                  task={task}
+                  busy={busyTaskId === task._id}
+                  onToggleStatus={toggleStatus}
+                  onEdit={setEditingTask}
+                  onDelete={deleteTask}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+      </main>
+
+      <EditTaskModal
+        task={editingTask}
+        isOpen={Boolean(editingTask)}
+        onClose={() => setEditingTask(null)}
+        onSave={updateTask}
+      />
     </div>
   );
 }

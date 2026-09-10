@@ -1,0 +1,97 @@
+/* ============================================
+   TaskFlow design tokens
+   Light theme is the default; dark theme is
+   applied via [data-theme="dark"] on <html>.
+   ============================================ */
+
+:root {
+  /* Brand */
+  --flow-teal: #0f9c8f;
+  --flow-teal-600: #0b7f75;
+  --flow-teal-700: #086961;
+  --flow-violet: #5b5ff0;
+
+  /* Priority / status accents */
+  --accent-low: #1f9d55;
+  --accent-low-bg: #e4f7ec;
+  --accent-medium: #b7791f;
+  --accent-medium-bg: #fdf3dc;
+  --accent-high: #d64545;
+  --accent-high-bg: #fbe6e6;
+  --accent-pending: #b7791f;
+  --accent-pending-bg: #fdf3dc;
+  --accent-completed: #1f9d55;
+  --accent-completed-bg: #e4f7ec;
+
+  /* Surfaces */
+  --bg: #f4f5f8;
+  --bg-subtle: #eaecf2;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --border: #e2e4ec;
+  --border-strong: #cbd0dc;
+
+  /* Text */
+  --ink-900: #12141c;
+  --ink-700: #383c4a;
+  --ink-500: #676c7d;
+  --ink-400: #8b8fa0;
+  --ink-on-accent: #ffffff;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(18, 20, 28, 0.06);
+  --shadow-md: 0 4px 14px rgba(18, 20, 28, 0.08);
+  --shadow-lg: 0 16px 40px rgba(18, 20, 28, 0.14);
+  --shadow-focus: 0 0 0 3px rgba(15, 156, 143, 0.25);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  /* Type */
+  --font-body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 140ms;
+  --duration-base: 220ms;
+}
+
+[data-theme="dark"] {
+  --flow-teal: #2bc4b3;
+  --flow-teal-600: #22a597;
+  --flow-teal-700: #1c8a7f;
+  --flow-violet: #8b8ff8;
+
+  --accent-low: #4ade80;
+  --accent-low-bg: rgba(74, 222, 128, 0.14);
+  --accent-medium: #f0b93d;
+  --accent-medium-bg: rgba(240, 185, 61, 0.14);
+  --accent-high: #f27272;
+  --accent-high-bg: rgba(242, 114, 114, 0.14);
+  --accent-pending: #f0b93d;
+  --accent-pending-bg: rgba(240, 185, 61, 0.14);
+  --accent-completed: #4ade80;
+  --accent-completed-bg: rgba(74, 222, 128, 0.14);
+
+  --bg: #0e1016;
+  --bg-subtle: #14161f;
+  --surface: #181b25;
+  --surface-raised: #1f2230;
+  --border: #2a2e3d;
+  --border-strong: #3a3f52;
+
+  --ink-900: #f3f4f8;
+  --ink-700: #cdd0dc;
+  --ink-500: #9599ab;
+  --ink-400: #6d7186;
+  --ink-on-accent: #0e1016;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.45);
+  --shadow-focus: 0 0 0 3px rgba(43, 196, 179, 0.3);
+}
